@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitchen Fast - Elevator Pitch Presentation</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #005F73;
+      --primary-light: #94D2BD;
+      --secondary: #EE9B00;
+      --accent: #00F5D4;
+      --bg-dark: #001219;
+      --card-bg: rgba(10, 25, 47, 0.7);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --text-white: #F8F9FA;
+      --text-gray: #A0AEC0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    h1, h2, h3, .brand {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Background decoration */
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .circle-1 {
+      top: -10%;
+      left: -10%;
+      width: 50vw;
+      height: 50vw;
+      background-color: var(--primary);
+    }
+
+    .circle-2 {
+      bottom: -10%;
+      right: -10%;
+      width: 45vw;
+      height: 45vw;
+      background-color: var(--secondary);
+    }
+
+    /* Presentation Wrapper */
+    .presentation-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 1;
+    }
+
+    /* Progress bar */
+    .progress-bar-container {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    /* Header */
+    header {
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--bg-dark);
+      font-size: 1.2rem;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--text-white), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* Autoplay Toggle */
+    .autoplay-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      color: var(--text-gray);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .autoplay-btn.active {
+      background: rgba(0, 245, 212, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 10px rgba(0, 245, 212, 0.2);
+    }
+
+    /* Practice Timer Panel */
+    .timer-panel {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .timer-display {
+      font-family: monospace;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--accent);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .timer-display.warning {
+      color: var(--secondary);
+      animation: blink 1s infinite alternate;
+    }
+
+    .timer-display.danger {
+      color: #E63946;
+      animation: blink 0.5s infinite alternate;
+    }
+
+    .slide-timer-info {
+      font-size: 0.8rem;
+      color: var(--text-gray);
+      margin-left: 5px;
+      border-left: 1px solid var(--border-color);
+      padding-left: 10px;
+      display: none;
+    }
+
+    .slide-timer-info.active {
+      display: inline;
+    }
+
+    .timer-btn {
+      background: none;
+      border: none;
+      color: var(--text-white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      opacity: 0.7;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .timer-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    /* Slide Deck */
+    .slide-deck {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 4rem;
+    }
+
+    /* Slides styling */
+    .slide {
+      position: absolute;
+      width: 90%;
+      max-width: 1200px;
+      height: 70vh;
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      pointer-events: none;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      display: grid;
+      align-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    /* Grid Layouts inside slides */
+    .slide-grid-2 {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .slide-grid-1 {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .slide-header {
+      margin-bottom: 2rem;
+    }
+
+    .slide-tag {
+      color: var(--secondary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .slide-title {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--text-white) 30%, var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-description {
+      font-size: 1.2rem;
+      color: var(--text-gray);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Cards & Elements */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(238, 155, 0, 0.3);
+    }
+
+    .accent-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    /* Key metrics */
+    .metric-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+      width: 100%;
+    }
+
+    .metric-card {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+
+    .metric-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--secondary);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Canvas Grid */
+    .canvas-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .canvas-item {
+      padding: 1rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+
+    .canvas-item:hover {
+      background: rgba(255,255,255,0.07);
+    }
+
+    .canvas-title {
+      font-weight: bold;
+      color: var(--secondary);
+      margin-bottom: 0.3rem;
+    }
+
+    /* Pricing comparison table style */
+    .price-compare {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .price-row.highlight {
+      background: rgba(0, 95, 115, 0.15);
+      border-color: var(--primary);
+    }
+
+    .price-row.highlight .competitor-price {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .competitor-name {
+      font-weight: bold;
+    }
+
+    .competitor-price {
+      font-size: 1.1rem;
+    }
+
+    /* Team grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.8rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .team-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--text-white);
+      font-size: 0.9rem;
+    }
+
+    .team-name {
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .team-role {
+      font-size: 0.75rem;
+      color: var(--text-gray);
+    }
+
+    /* Financial Charts - Corrected spacing & taller container to prevent overlaps */
+    .chart-outer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      padding-top: 0.5rem;
+    }
+
+    .chart-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      height: 230px; /* Taller height to allow values and bars */
+      width: 100%;
+      margin-top: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.2rem;
+    }
+
+    .chart-bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90px;
+    }
+
+    .chart-bar-value {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .chart-bar {
+      width: 45px;
+      background: linear-gradient(180deg, var(--accent), var(--primary));
+      border-radius: 6px 6px 0 0;
+      transition: height 1s cubic-bezier(0.1, 1, 0.1, 1);
+      height: 0px; /* animated in JS */
+      box-shadow: 0 4px 15px rgba(0, 245, 212, 0.15);
+    }
+
+    .chart-bar-label {
+      font-size: 0.8rem;
+      color: var(--text-gray);
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    /* Footer Controls */
+    footer {
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+    }
+
+    .navigation-dots {
+      display: flex;
+      gap: 12px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+
+    .nav-arrows {
+      display: flex;
+      gap: 15px;
+    }
+
+    .arrow-btn {
+      background: var(--primary);
+      border: none;
+      color: var(--text-white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .arrow-btn:hover {
+      background: var(--secondary);
+      transform: scale(1.05);
+    }
+
+    /* Canvas overlay modal */
+    .canvas-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 18, 25, 0.95);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .canvas-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .canvas-modal {
+      width: 90%;
+      max-width: 1200px;
+      background: #001f2d;
+      border: 2px solid var(--primary);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .canvas-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .canvas-modal-title {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .close-modal-btn {
+      background: none;
+      border: none;
+      color: #FFF;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .canvas-full-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, 220px);
+      gap: 12px;
+    }
+
+    .c-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1.2rem;
+      overflow-y: auto;
+    }
+
+    .c-box-title {
+      font-weight: bold;
+      color: var(--secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .c-box-content {
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: var(--text-white);
+    }
+
+    .row-span-2 {
+      grid-row: span 2;
+    }
+
+    /* Layout assignments for BMC */
+    #asociaciones { grid-column: 1; }
+    #actividades { grid-column: 2; grid-row: 1; }
+    #recursos { grid-column: 2; grid-row: 2; }
+    #propuesta { grid-column: 3; }
+    #relaciones { grid-column: 4; grid-row: 1; }
+    #canales { grid-column: 4; grid-row: 2; }
+    #segmentos { grid-column: 5; }
+    #costos { grid-column: 1 / span 2; grid-row: 3; }
+    #ingresos { grid-column: 3 / span 3; grid-row: 3; }
+
+    .canvas-full-grid {
+      grid-template-rows: repeat(2, 160px) 130px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .slide-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .slide {
+        height: 80vh;
+      }
+      .metric-container {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+      header, footer {
+        padding: 1rem 1.5rem;
+      }
+      .slide-title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Decorative blur circles -->
+  <div class="bg-circle circle-1"></div>
+  <div class="bg-circle circle-2"></div>
+
+  <div class="presentation-container">
+    
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Header Panel -->
+    <header>
+      <div class="brand-container">
+        <div class="brand-logo">K</div>
+        <div class="brand">Kitchen Fast</div>
+      </div>
+      
+      <!-- Controls (Autoplay & Timer) -->
+      <div class="controls-panel">
+        <button class="autoplay-btn" id="autoplayToggleBtn" title="Activar avance automático coordinado">
+          <span>⏱ Autoplay: OFF</span>
+        </button>
+        
+        <div class="timer-panel">
+          <button class="timer-btn" id="timerPlayBtn" title="Iniciar/Pausar Temporizador">▶</button>
+          <button class="timer-btn" id="timerResetBtn" title="Reiniciar Temporizador">⟲</button>
+          <span class="timer-display" id="timerDisplay">03:00</span>
+          <span class="slide-timer-info" id="slideTimerInfo">S: 25s</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Slide Deck Container -->
+    <div class="slide-deck">
+
+      <!-- SLIDE 1: INTRODUCCION -->
+      <div class="slide active" id="slide-1">
+        <div class="slide-grid-1">
+          <span class="slide-tag">Elevator Pitch</span>
+          <h1 class="slide-title" style="font-size: 4.5rem; margin-bottom: 0.5rem;">KITCHEN FAST</h1>
+          <p class="slide-description" style="font-size: 1.5rem; font-weight: 300; max-width: 800px; margin-bottom: 2rem;">
+            Come inteligente, vive eficiente. Alimentación universitaria saludable de bajo costo bajo suscripción.
+          </p>
+          <div class="glass-card" style="max-width: 600px; text-align: center;">
+            <div class="accent-bar"></div>
+            <p style="font-size: 1rem; line-height: 1.6;">
+              "Hola a todos, somos <strong>Kitchen Fast</strong>, una iniciativa de alimentación para el sector universitario creada por estudiantes de profesional del Tecnológico de Monterrey."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: EL PROBLEMA -->
+      <div class="slide" id="slide-2">
+        <div class="slide-grid-2">
+          <div>
+            <span class="slide-tag">El Problema</span>
+            <h2 class="slide-title">La disyuntiva diaria del estudiante</h2>
+            <p class="slide-description">
+              Los estudiantes universitarios carecen de tiempo y presupuesto. Se enfrentan a comida chatarra de bajo valor o a precios prohibitivos en apps de entrega.
+            </p>
+            <div class="metric-container">
+              <div class="glass-card metric-card">
+                <div class="metric-value">82%</div>
+                <div class="metric-label">Dieta Deficiente</div>
+              </div>
+              <div class="glass-card metric-card">
+                <div class="metric-value">+$160</div>
+                <div class="metric-label">Costo por Pedido</div>
+              </div>
+              <div class="glass-card metric-card">
+                <div class="metric-value">45 min</div>
+                <div class="metric-label">Tiempo de espera</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card">
+            <div class="accent-bar"></div>
+            <h3 style="margin-bottom: 1rem; color: var(--secondary)">El perfil del cliente: Carlos</h3>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-gray)">
+              Estudiante foráneo, de 21 años, carrera demandante. Vive a menos de 1.5 km del campus. Tiene un presupuesto de manutención ajustado.
+            </p>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem; font-size: 0.9rem; font-style: italic;">
+              "Carlos se debate a diario entre el costo excesivo del delivery y la mala alimentación."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: LA SOLUCION Y VALOR -->
+      <div class="slide" id="slide-3">
+        <div class="slide-grid-2">
+          <div>
+            <span class="slide-tag">La Solución</span>
+            <h2 class="slide-title">Operación express & residuo cero</h2>
+            <p class="slide-description">
+              Suscripción alimenticia semanal flexible diseñada por nutriólogos, servida en envases reutilizables y con entrega inmediata en campus.
+            </p>
+            
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+              <div style="display:flex; align-items: center; gap: 15px;">
+                <div style="background: var(--primary); width: 36px; height: 36px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">1</div>
+                <div><strong>Eco-Bento:</strong> Contenedor térmico de acero inoxidable (residuo cero).</div>
+              </div>
+              <div style="display:flex; align-items: center; gap: 15px;">
+                <div style="background: var(--primary); width: 36px; height: 36px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">2</div>
+                <div><strong>QR Pick-up:</strong> Retiro a pie en micro-nodos en menos de un minuto.</div>
+              </div>
+              <div style="display:flex; align-items: center; gap: 15px;">
+                <div style="background: var(--primary); width: 36px; height: 36px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">3</div>
+                <div><strong>Suscripción Flexible:</strong> Menús dinámicos a través de la plataforma web.</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <div class="accent-bar"></div>
+            <div style="font-size: 5rem; margin-bottom: 0.5rem;">🍲</div>
+            <h3 style="margin-bottom: 0.5rem; color: var(--accent);">Entrega en &lt; 1 min</h3>
+            <p style="font-size: 0.9rem; color: var(--text-gray); line-height: 1.5;">
+              Eliminamos las ineficiencias de última milla. El usuario compra digitalmente, recoge físicamente de camino a clases de manera ágil.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: MERCADO Y CLIENTES -->
+      <div class="slide" id="slide-4">
+        <div class="slide-grid-2">
+          <div>
+            <span class="slide-tag">El Mercado</span>
+            <h2 class="slide-title">TAM, SAM, SOM local y focalizado</h2>
+            <p class="slide-description">
+              Iniciamos con una penetración enfocada en el campus principal del Tec de Monterrey para validar y controlar el crecimiento.
+            </p>
+            <div class="metric-container" style="margin-top: 2rem;">
+              <div class="glass-card metric-card">
+                <div class="metric-value">$2,400M</div>
+                <div class="metric-label">TAM (Nacional Joven)</div>
+              </div>
+              <div class="glass-card metric-card">
+                <div class="metric-value">$350M</div>
+                <div class="metric-label">SAM (Campus Privados)</div>
+              </div>
+              <div class="glass-card metric-card">
+                <div class="metric-value">$1.56M</div>
+                <div class="metric-label">SOM (18 meses)</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card">
+            <div class="accent-bar"></div>
+            <h3 style="margin-bottom: 1rem; color: var(--secondary);">Beachhead Market</h3>
+            <p style="font-size: 0.95rem; line-height: 1.6;">
+              Estudiantes foráneos de nivel profesional que habitan a menos de 1.5 km del Tec de Monterrey. Frecuencia de comida fuera del hogar de 4 a 5 veces por semana con un ingreso mensual asignado de $8,000 MXN.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: MODELO CANVAS Y COMPETENCIA -->
+      <div class="slide" id="slide-5">
+        <div class="slide-grid-2">
+          <div>
+            <span class="slide-tag">Modelo de Negocio</span>
+            <h2 class="slide-title">Suscripción Prepagada y Ventaja en Costos</h2>
+            <p class="slide-description">
+              El cobro electrónico anticipado elimina el riesgo de cartera vencida y reduce a cero el desperdicio de insumos.
+            </p>
+            
+            <div class="price-compare" style="margin-top: 1.5rem;">
+              <div class="price-row highlight">
+                <span class="competitor-name">Kitchen Fast (Nuestro Modelo)</span>
+                <span class="competitor-price">$65.00 MXN</span>
+              </div>
+              <div class="price-row">
+                <span class="competitor-name">Fondas Tradicionales</span>
+                <span class="competitor-price">$85.00 MXN</span>
+              </div>
+              <div class="price-row">
+                <span class="competitor-name">Apps de Delivery (Uber/Rappi)</span>
+                <span class="competitor-price">$160.00+ MXN</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="accent-bar"></div>
+            <div>
+              <h3 style="color: var(--secondary); margin-bottom: 0.5rem;">Business Model Canvas</h3>
+              <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-gray); margin-bottom: 1.5rem;">
+                Nuestros 9 bloques estructurados alinean la producción en Dark Kitchen centralizada con puntos peatonales de recogida.
+              </p>
+            </div>
+            
+            <button id="openCanvasBtn" style="background: var(--primary); border: none; padding: 0.8rem 1.5rem; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: background 0.2s;">
+              🔎 Abrir Canvas Interactivo
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: DESEMPEÑO FINANCIERO (Overlap Fix Applied) -->
+      <div class="slide" id="slide-6">
+        <div class="slide-grid-2">
+          <div>
+            <span class="slide-tag">Finanzas de Validación</span>
+            <h2 class="slide-title">Inversión Modesta y Crecimiento Realista</h2>
+            <p class="slide-description">
+              Validamos el negocio con un capital mínimo indispensable de <strong>$10,000 MXN</strong>, asumiendo un escalamiento sumamente acotado y viable.
+            </p>
+            <div style="background: rgba(255,255,255,0.02); padding: 1.2rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); margin-top: 1.5rem;">
+              <p style="font-size: 0.9rem; line-height: 1.6;">
+                <strong>Financiamiento:</strong> $6,000 MXN aportados por los socios ($1,000 cada uno) + $4,000 MXN de préstamo familiar blando a tasa cero.
+              </p>
+            </div>
+          </div>
+          
+          <div class="glass-card" style="padding: 1.5rem;">
+            <div class="accent-bar"></div>
+            <h3 style="color: var(--secondary); text-align: center; font-size: 1.1rem; margin-bottom: -0.5rem;">Utilidad Neta Proyectada (Años 1-3)</h3>
+            
+            <div class="chart-outer-container">
+              <div class="chart-container">
+                <div class="chart-bar-group">
+                  <div class="chart-bar-value">$246k</div>
+                  <!-- Reduced max bar height and adjusted proportionally to prevent overlaps -->
+                  <div class="chart-bar" data-height="36"></div>
+                  <div class="chart-bar-label">Año 1 (25 u)</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar-value">$504k</div>
+                  <div class="chart-bar" data-height="75"></div>
+                  <div class="chart-bar-label">Año 2 (50 u)</div>
+                </div>
+                <div class="chart-bar-group">
+                  <div class="chart-bar-value">$1.0M</div>
+                  <div class="chart-bar" data-height="150"></div>
+                  <div class="chart-bar-label">Año 3 (100 u)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: EQUIPO Y PETICIÓN -->
+      <div class="slide" id="slide-7">
+        <div class="slide-grid-2">
+          <div>
+            <span class="slide-tag">Equipo & Red de Apoyo</span>
+            <h2 class="slide-title">¿Qué Necesitamos de Ustedes?</h2>
+            <p class="slide-description">
+              Buscamos mentoría operativa en cadenas de suministro alimentario y alianzas de difusión con asociaciones estudiantiles del campus.
+            </p>
+            
+            <div style="background: rgba(0, 95, 115, 0.1); border: 1px solid var(--primary); padding: 1.2rem; border-radius: 12px; margin-top: 1.5rem;">
+              <h3 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.5rem;">Nuestra Red de Apoyo</h3>
+              <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-gray)">
+                Incubadora de Empresas del Tec de Monterrey, convenio de difusión con FEITEC y abasto directo con productores agrícolas locales.
+              </p>
+            </div>
+          </div>
+          
+          <div class="glass-card">
+            <div class="accent-bar"></div>
+            <h3 style="color: var(--secondary); margin-bottom: 1rem; text-align: center;">Equipo Multidisciplinario</h3>
+            
+            <div class="team-grid">
+              <div class="team-member">
+                <div class="team-avatar">LH</div>
+                <div>
+                  <div class="team-name">Lia Heras</div>
+                  <div class="team-role">Dir. General & Calidad</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">AM</div>
+                <div>
+                  <div class="team-name">Ale Moreira</div>
+                  <div class="team-role">Marketing</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">OC</div>
+                <div>
+                  <div class="team-name">Oscar Castro</div>
+                  <div class="team-role">Finanzas</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">RA</div>
+                <div>
+                  <div class="team-name">Rafa Arvizu</div>
+                  <div class="team-role">Tecnología</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">JV</div>
+                <div>
+                  <div class="team-name">Josué V.</div>
+                  <div class="team-role">Logística</div>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">MH</div>
+                <div>
+                  <div class="team-name">Mar Herrera</div>
+                  <div class="team-role">Servicio</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 1.2rem; text-align: center; font-size: 0.8rem; color: var(--text-gray);">
+              Asesor Académico: <strong>Dr. José Manuel Aguirre G.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Panel -->
+    <footer>
+      <div class="footer-left">
+        EM1011 Emprendimiento e Innovación
+      </div>
+      
+      <!-- Slide indicators -->
+      <div class="navigation-dots" id="dotsContainer"></div>
+
+      <!-- Slide controls -->
+      <div class="nav-arrows">
+        <button class="arrow-btn" id="prevBtn" title="Anterior (Flecha Izquierda)">◀</button>
+        <button class="arrow-btn" id="nextBtn" title="Siguiente (Flecha Derecha / Espacio)">▶</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Business Model Canvas Overlay Modal -->
+  <div class="canvas-overlay" id="canvasOverlay">
+    <div class="canvas-modal">
+      <div class="canvas-modal-header">
+        <h3 class="canvas-modal-title">Business Model Canvas - Kitchen Fast</h3>
+        <button class="close-modal-btn" id="closeCanvasBtn">&times;</button>
+      </div>
+      
+      <div class="canvas-full-grid">
+        <!-- Asociaciones -->
+        <div class="c-box row-span-2" id="asociaciones">
+          <div class="c-box-title">Asociaciones Clave</div>
+          <div class="c-box-content">
+            • Productores agrícolas directos.<br>
+            • Carnicerías mayoristas.<br>
+            • Asociaciones estudiantiles.<br>
+            • Incubadora Tec.
+          </div>
+        </div>
+        <!-- Actividades -->
+        <div class="c-box" id="actividades">
+          <div class="c-box-title">Actividades Clave</div>
+          <div class="c-box-content">
+            • Preparación estandarizada.<br>
+            • Logística de entrega matutina.<br>
+            • Control higiénico y sanitización.
+          </div>
+        </div>
+        <!-- Recursos -->
+        <div class="c-box" id="recursos">
+          <div class="c-box-title">Recursos Clave</div>
+          <div class="c-box-content">
+            • Cocina oculta.<br>
+            • Software de pedidos y QR.<br>
+            • Contenedores Eco-Bentos.
+          </div>
+        </div>
+        <!-- Propuesta -->
+        <div class="c-box row-span-2" id="propuesta">
+          <div class="c-box-title">Propuesta de Valor</div>
+          <div class="c-box-content">
+            • Alimentos balanceados por nutriólogos.<br>
+            • Precio accesible de $65.00 MXN.<br>
+            • Retiro rápido en &lt; 1 min vía QR.<br>
+            • Sostenible (sin empaques desechables).
+          </div>
+        </div>
+        <!-- Relaciones -->
+        <div class="c-box" id="relaciones">
+          <div class="c-box-title">Relaciones Clientes</div>
+          <div class="c-box-content">
+            • Auto-servicio automatizado.<br>
+            • Gamificación (Streaks de lealtad).<br>
+            • Soporte directo por WhatsApp.
+          </div>
+        </div>
+        <!-- Canales -->
+        <div class="c-box" id="canales">
+          <div class="c-box-title">Canales</div>
+          <div class="c-box-content">
+            • Plataforma web adaptativa.<br>
+            • Bot interactivo de pedidos.<br>
+            • Puntos de recogida (micro-nodos).
+          </div>
+        </div>
+        <!-- Segmentos -->
+        <div class="c-box row-span-2" id="segmentos">
+          <div class="c-box-title">Segmento Clientes</div>
+          <div class="c-box-content">
+            • Estudiantes foráneos de profesional (18-25 años).<br>
+            • Alta sensibilidad al precio.<br>
+            • Baja disponibilidad de tiempo.
+          </div>
+        </div>
+        <!-- Costos -->
+        <div class="c-box" id="costos">
+          <div class="c-box-title">Estructura de Costos</div>
+          <div class="c-box-content">
+            • Variables: Insumos ($25/comida) y amortización de bentos ($5/comida).<br>
+            • Fijos: Alquiler proporcional de cocina y nómina de apoyo operativo.
+          </div>
+        </div>
+        <!-- Ingresos -->
+        <div class="c-box" id="ingresos">
+          <div class="c-box-title">Flujo de Ingresos</div>
+          <div class="c-box-content">
+            • Cobros recurrentes por suscripciones semanales y mensuales anticipadas.<br>
+            • Venta de envase Eco-Bento como kit de ingreso inicial.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider and Timer Script -->
+  <script>
+    // State Variables
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    
+    // Timing Strategy (in seconds per slide) matching the 3-minute pitch
+    const slideDurations = [25, 25, 25, 25, 30, 30, 20]; 
+    
+    // Timer Variables
+    let totalTimerSeconds = 180; // 3 minutes total countdown
+    let timerInterval = null;
+    let timerRunning = false;
+    
+    // Autoplay Variables
+    let autoplayActive = false;
+    let slideSecondsRemaining = slideDurations[0];
+
+    // Elements
+    const progressBar = document.getElementById('progressBar');
+    const dotsContainer = document.getElementById('dotsContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerPlayBtn = document.getElementById('timerPlayBtn');
+    const timerResetBtn = document.getElementById('timerResetBtn');
+    const autoplayToggleBtn = document.getElementById('autoplayToggleBtn');
+    const slideTimerInfo = document.getElementById('slideTimerInfo');
+    const canvasOverlay = document.getElementById('canvasOverlay');
+    const openCanvasBtn = document.getElementById('openCanvasBtn');
+    const closeCanvasBtn = document.getElementById('closeCanvasBtn');
+
+    // Create Dots
+    function initDots() {
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => navigateToSlide(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    // Slide Navigation
+    function updateSlideState() {
+      // Toggle active slide class
+      slides.forEach((slide, index) => {
+        if (index === currentSlideIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Update dots
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, index) => {
+        if (index === currentSlideIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+
+      // Progress bar percentage
+      const progressPercent = (currentSlideIndex / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Reset individual slide autoplay timer on change
+      slideSecondsRemaining = slideDurations[currentSlideIndex];
+      updateSlideTimerUI();
+
+      // Trigger bar animations in Slide 6
+      if (currentSlideIndex === 5) {
+        setTimeout(() => {
+          document.querySelectorAll('.chart-bar').forEach(bar => {
+            const height = bar.getAttribute('data-height');
+            bar.style.height = `${height}px`;
+          });
+        }, 150);
+      } else {
+        document.querySelectorAll('.chart-bar').forEach(bar => {
+          bar.style.height = '0px';
+        });
+      }
+    }
+
+    function navigateToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlideIndex = index;
+        updateSlideState();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < totalSlides - 1) {
+        navigateToSlide(currentSlideIndex + 1);
+      } else if (autoplayActive) {
+        // Stop autoplay on last slide
+        toggleAutoplay(false);
+        toggleTimer(false);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        navigateToSlide(currentSlideIndex - 1);
+      }
+    }
+
+    // Keyboard & Events listeners
+    document.addEventListener('keydown', (e) => {
+      if (canvasOverlay.classList.contains('active')) {
+        if (e.key === 'Escape') closeCanvas();
+        return;
+      }
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // Touch support (swipe)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      if (canvasOverlay.classList.contains('active')) return;
+      if (touchEndX < touchStartX - 50) {
+        nextSlide();
+      }
+      if (touchEndX > touchStartX + 50) {
+        prevSlide();
+      }
+    }
+
+    // Canvas Modal control
+    function openCanvas() {
+      canvasOverlay.classList.add('active');
+    }
+
+    function closeCanvas() {
+      canvasOverlay.classList.remove('active');
+    }
+
+    // Practice Timer Logic
+    function formatTime(seconds) {
+      const minutes = Math.floor(Math.abs(seconds) / 60);
+      const remainingSecs = Math.floor(Math.abs(seconds) % 60);
+      const prefix = seconds < 0 ? "-" : "";
+      return `${prefix}${String(minutes).padStart(2, '0')}:${String(remainingSecs).padStart(2, '0')}`;
+    }
+
+    function updateTimerUI() {
+      timerDisplay.textContent = formatTime(totalTimerSeconds);
+      
+      // Warning colors for total countdown
+      if (totalTimerSeconds <= 0) {
+        timerDisplay.className = 'timer-display danger';
+      } else if (totalTimerSeconds <= 30) {
+        timerDisplay.className = 'timer-display warning';
+      } else {
+        timerDisplay.className = 'timer-display';
+      }
+    }
+
+    function updateSlideTimerUI() {
+      if (autoplayActive) {
+        slideTimerInfo.textContent = `S: ${slideSecondsRemaining}s`;
+        slideTimerInfo.classList.add('active');
+      } else {
+        slideTimerInfo.classList.remove('active');
+      }
+    }
+
+    function toggleTimer(forceState = null) {
+      const targetState = forceState !== null ? forceState : !timerRunning;
+      
+      if (!targetState) {
+        // Pause
+        clearInterval(timerInterval);
+        timerPlayBtn.textContent = '▶';
+        timerRunning = false;
+      } else {
+        // Play
+        timerInterval = setInterval(() => {
+          // Total countdown
+          totalTimerSeconds--;
+          updateTimerUI();
+          
+          // Autoplay logic per slide
+          if (autoplayActive) {
+            slideSecondsRemaining--;
+            updateSlideTimerUI();
+            
+            if (slideSecondsRemaining <= 0) {
+              nextSlide();
+            }
+          }
+        }, 1000);
+        timerPlayBtn.textContent = '⏸';
+        timerRunning = true;
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      totalTimerSeconds = 180;
+      slideSecondsRemaining = slideDurations[currentSlideIndex];
+      timerRunning = false;
+      timerPlayBtn.textContent = '▶';
+      updateTimerUI();
+      updateSlideTimerUI();
+    }
+
+    // Autoplay mode toggle logic
+    function toggleAutoplay(forceState = null) {
+      autoplayActive = forceState !== null ? forceState : !autoplayActive;
+      
+      if (autoplayActive) {
+        autoplayToggleBtn.classList.add('active');
+        autoplayToggleBtn.querySelector('span').textContent = '⏱ Autoplay: ON';
+        slideSecondsRemaining = slideDurations[currentSlideIndex];
+        slideTimerInfo.classList.add('active');
+        updateSlideTimerUI();
+        
+        // Auto start the timer if not already running
+        if (!timerRunning) {
+          toggleTimer(true);
+        }
+      } else {
+        autoplayToggleBtn.classList.remove('active');
+        autoplayToggleBtn.querySelector('span').textContent = '⏱ Autoplay: OFF';
+        slideTimerInfo.classList.remove('active');
+      }
+    }
+
+    // Event binding
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    timerPlayBtn.addEventListener('click', () => toggleTimer());
+    timerResetBtn.addEventListener('click', resetTimer);
+    autoplayToggleBtn.addEventListener('click', () => toggleAutoplay());
+    openCanvasBtn.addEventListener('click', openCanvas);
+    closeCanvasBtn.addEventListener('click', closeCanvas);
+    canvasOverlay.addEventListener('click', (e) => {
+      if (e.target === canvasOverlay) closeCanvas();
+    });
+
+    // Initialize
+    initDots();
+    updateSlideState();
+    updateTimerUI();
+  </script>
+</body>
+</html>
