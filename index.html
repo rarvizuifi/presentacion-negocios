@@ -731,7 +731,7 @@
         <div class="timer-panel">
           <button class="timer-btn" id="timerPlayBtn" title="Iniciar/Pausar Temporizador">▶</button>
           <button class="timer-btn" id="timerResetBtn" title="Reiniciar Temporizador">⟲</button>
-          <span class="timer-display" id="timerDisplay">03:00</span>
+          <span class="timer-display" id="timerDisplay">04:00</span>
           <span class="slide-timer-info" id="slideTimerInfo">S: 25s</span>
         </div>
       </div>
@@ -1148,11 +1148,12 @@
     const slides = document.querySelectorAll('.slide');
     const totalSlides = slides.length;
     
-    // Timing Strategy (in seconds per slide) matching the 3-minute pitch
-    const slideDurations = [25, 25, 25, 25, 30, 30, 20]; 
+    // Timing Strategy (in seconds per slide) — target ~4 min total
+    // S1:Intro(25) S2:Problema(35) S3:Solución(35) S4:Mercado(35) S5:Canvas+Modelo(35) S6:Finanzas(35) S7:Equipo+Cierre(30) = 230 s
+    const slideDurations = [25, 35, 35, 35, 35, 35, 30]; 
     
     // Timer Variables
-    let totalTimerSeconds = 180; // 3 minutes total countdown
+    let totalTimerSeconds = 240; // 4 minutes total countdown
     let timerInterval = null;
     let timerRunning = false;
     
@@ -1362,7 +1363,7 @@
 
     function resetTimer() {
       clearInterval(timerInterval);
-      totalTimerSeconds = 180;
+      totalTimerSeconds = 240;
       slideSecondsRemaining = slideDurations[currentSlideIndex];
       timerRunning = false;
       timerPlayBtn.textContent = '▶';
